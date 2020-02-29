@@ -1,20 +1,14 @@
-import { combineReducers, createStore } from 'redux'
+import { combineReducers, createStore, applyMiddleware } from 'redux'
+import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
-
-import count from './reducers'
-import { CounterState } from './types'
+import { PalanetReducer } from './reducers'
 
 const reducer = combineReducers({
-  count,
+  PalanetReducer,
 })
 
-export interface State {
-  count: CounterState
-}
-
-const configureStore = (initialState?: State) =>
-  createStore(reducer, initialState, applyMiddleware(thunk))
+const configureStore = () =>
+  createStore(reducer, composeWithDevTools(applyMiddleware(thunk)))
 
 const store = configureStore()
-
 export default store

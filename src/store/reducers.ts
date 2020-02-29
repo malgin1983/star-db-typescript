@@ -1,22 +1,54 @@
-import { Increment, Decrement, CounterState, CounterActions } from './types'
-import { Action } from 'redux'
+import * as types from './names'
+import * as actions from './actions'
 
-const initialState: CounterState = {
-  count: 0,
+
+// export interface PlanetType {
+//   id: number
+//   name: string
+//   population: string
+//   rotationPeriod: string
+//   diameter: string
+// }
+
+
+
+export type InitialStateType ={
+  data: object
+  loading: boolean
+  error: null | boolean
 }
 
-const count = (
-  state: CounterState = initialState,
-  action: Action | CounterActions
-): CounterState => {
+
+
+export const initialState: InitialStateType = {
+  data: [],
+  loading: true,
+  error: null,
+}
+
+type ActionType = actions.RequestPlanetAction | actions.SucccessPlanetAction | actions.ErrorPlanetAction
+
+export const PalanetReducer = (
+  state: InitialStateType = initialState,
+  action: ActionType
+): InitialStateType => {
   switch (action.type) {
-    case Increment:
-      return { ...state, count: state.count + 1 }
-    case Decrement:
-      return { ...state, count: state.count - 1 }
+    case types.requestPlanet:
+      return { ...state }
+    case types.getDataPlanet:
+      return { 
+        data: action.payload,
+        loading: false,
+        error: null
+       }
+    case types.errorDataPlanet:
+    return { 
+      data: [],
+      loading: false,
+      error: action.payload
+      }
     default:
       return state
   }
 }
 
-export default count

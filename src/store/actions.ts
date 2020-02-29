@@ -1,40 +1,79 @@
-import { Increment, Decrement, IncrementAction, DecrementAction } from './types'
-import { Action, ActionCreator, Dispatch } from 'redux'
-import { ThunkAction } from 'redux-thunk'
+import * as names from './names'
+import * as types  from './reducers'
 
-// Redux action
-const reduxAction: ActionCreator<Action> = (text: string) => {
+//********************TYPES ACTION*********************** */
+
+type PlanetType = {
+  id: number
+  name: string
+  population: string
+  rotationPeriod: string
+  diameter: string
+}
+
+export type RequestPlanetAction = {
+  type: typeof names.requestPlanet
+  payload: []
+  loading: true
+  error: null
+}
+
+export type SucccessPlanetAction = {
+  type: typeof names.getDataPlanet
+  payload: Array<PlanetType>
+  loading: false
+  error: null
+}
+
+export type ErrorPlanetAction = {
+  type: typeof names.errorDataPlanet
+  payload: any
+  loading: false
+  error: true
+}
+
+
+
+//*********************ACTION CREATORS***************** */
+
+export const requestPlanet = (): RequestPlanetAction => {
   return {
-    type: SET_TEXT,
-    text,
+    type: names.requestPlanet,
+    payload: [],
+    loading: true,
+    error: null,
   }
 }
 
-// Redux-Thunk action
-const thunkAction: ActionCreator<ThunkAction<Action, IState, void>> = (
-  text: string
-) => {
-  return (dispatch: Dispatch<IState>): Action => {
-    return dispatch({
-      type: SET_TEXT,
-      text,
-    })
+export const getPlanetAction = (data: Array<PlanetType>): SucccessPlanetAction => {
+  return {
+    type: names.getDataPlanet,
+    payload: data,
+    loading: false,
+    error: null,
   }
 }
 
-// Async Redux-Thunk action
-const asyncThinkAction: ActionCreator<ThunkAction<
-  Promise<Action>,
-  IState,
-  void
->> = () => {
-  return async (dispatch: Dispatch<IState>): Promise<Action> => {
+export const  errorPlanetAction = (data: any): ErrorPlanetAction => {
+  return {
+    type: names.errorDataPlanet,
+    payload: data,
+    loading: false,
+    error: true,
+  }
+}
+
+
+export const fetchPlanet  = (id: number) => {
+  return async( dispatch: any ) =>{
+    dispatch(requestPlanet())
     try {
-      const text = await Api.call()
-      return dispatch({
-        type: SET_TEXT,
-        text,
-      })
-    } catch (e) {}
+      const response = await fetch(`https://swapi.co/api/planets/1/`)
+      const data = await response.json()
+      console.log('data :', data);
+      dispatch(getPlanetAction(data))
+    } catch (err) {
+      dispatch(errorPlanetAction(err))
+    }
   }
 }
