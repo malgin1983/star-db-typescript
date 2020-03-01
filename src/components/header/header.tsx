@@ -1,8 +1,14 @@
 import React, { Component } from 'react'
 import { fetchPlanet } from '../../store/actions'
 import { connect } from 'react-redux'
+import { Dispatch } from 'redux'
+import { ThunkAction } from 'redux-thunk'
 
-class Header extends Component {
+type PropsType = {
+  fetchPlanet(): Promise<void>
+}
+
+class Header extends Component<PropsType> {
   updatePlanet = () => {
     this.props.fetchPlanet()
   }
@@ -19,9 +25,9 @@ class Header extends Component {
     )
   }
 }
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
-    fetchPlanet: id => dispatch(fetchPlanet(id)),
+    fetchPlanet: () => dispatch(fetchPlanet()),
   }
 }
 export default connect(null, mapDispatchToProps)(Header)

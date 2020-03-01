@@ -1,26 +1,35 @@
 import * as names from './names'
-import * as types  from './reducers'
+import {ActionType} from './reducers'
+import { Dispatch } from 'redux';
 
 //********************TYPES ACTION*********************** */
 
-type PlanetType = {
-  id: number
-  name: string
-  population: string
-  rotationPeriod: string
+export interface PlanetType {
+  rotation_period: string
+  orbital_period: string
   diameter: string
-}
+  climate: string
+  gravity: string
+  terrain: string
+  surface_water: string
+  population: string
+  residents: Array<string>
+  films: Array<string>
+  created: string
+  edited: string
+  url: string
+  }
 
 export type RequestPlanetAction = {
   type: typeof names.requestPlanet
-  payload: []
+  payload: {}
   loading: true
   error: null
 }
 
 export type SucccessPlanetAction = {
   type: typeof names.getDataPlanet
-  payload: Array<PlanetType>
+  payload: PlanetType
   loading: false
   error: null
 }
@@ -31,8 +40,6 @@ export type ErrorPlanetAction = {
   loading: false
   error: true
 }
-
-
 
 //*********************ACTION CREATORS***************** */
 
@@ -45,7 +52,7 @@ export const requestPlanet = (): RequestPlanetAction => {
   }
 }
 
-export const getPlanetAction = (data: Array<PlanetType>): SucccessPlanetAction => {
+export const getPlanetAction = (data: PlanetType): SucccessPlanetAction => {
   return {
     type: names.getDataPlanet,
     payload: data,
@@ -64,16 +71,24 @@ export const  errorPlanetAction = (data: any): ErrorPlanetAction => {
 }
 
 
-export const fetchPlanet  = (id: number) => {
-  return async( dispatch: any ) =>{
+export const fetchPlanet  = () => {
+  return async( dispatch: Dispatch<ActionType> ) =>{
     dispatch(requestPlanet())
     try {
       const response = await fetch(`https://swapi.co/api/planets/1/`)
       const data = await response.json()
-      console.log('data :', data);
       dispatch(getPlanetAction(data))
     } catch (err) {
       dispatch(errorPlanetAction(err))
     }
   }
+}
+
+
+
+export type mapDispatchToPropsType = {
+  fetchPlanet(id: number): Promise<void>
+  requestPlanet(): RequestPlanetAction
+  getPlanetAction(data: PlanetType): SucccessPlanetAction
+  errorPlanetAction (data: any):ErrorPlanetAction
 }
