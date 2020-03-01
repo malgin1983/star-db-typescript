@@ -41,6 +41,7 @@ export type ErrorPlanetAction = {
   error: true
 }
 
+export type fetchPromiseType = RequestPlanetAction | SucccessPlanetAction | ErrorPlanetAction
 //*********************ACTION CREATORS***************** */
 
 export const requestPlanet = (): RequestPlanetAction => {
@@ -69,8 +70,6 @@ export const  errorPlanetAction = (data: any): ErrorPlanetAction => {
     error: true,
   }
 }
-
-
 export const fetchPlanet  = () => {
   return async( dispatch: Dispatch<ActionType> ) =>{
     dispatch(requestPlanet())
@@ -84,6 +83,8 @@ export const fetchPlanet  = () => {
   }
 }
 
+
+export type fetchPlanetType = typeof fetchPlanet
 
 
 export type mapDispatchToPropsType = {
