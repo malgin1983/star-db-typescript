@@ -1,8 +1,8 @@
 import * as types from './names'
-import * as actions from './actions'
+import { ActionType, PlanetType} from './actions'
 
 export type InitialStateType ={
-  data: object
+  data: {}
   loading: boolean
   error: null | boolean
 }
@@ -13,7 +13,7 @@ export const initialState: InitialStateType = {
   error: null,
 }
 
-export type ActionType = actions.RequestPlanetAction | actions.SucccessPlanetAction | actions.ErrorPlanetAction
+
 
 export const PalanetReducer = (
   state: InitialStateType = initialState,
@@ -30,7 +30,7 @@ export const PalanetReducer = (
        }
     case types.errorDataPlanet:
     return { 
-      data: [],
+      data: {},
       loading: false,
       error: action.payload
       }
@@ -39,3 +39,4 @@ export const PalanetReducer = (
   }
 }
 
+export type stateType = typeof PalanetReducer

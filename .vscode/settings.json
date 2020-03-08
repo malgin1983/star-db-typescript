@@ -23,5 +23,5 @@
       "source.fixAll.eslint": true
     }
   },
-  "editor.fontFamily": "Fira code"
+  "editor.fontFamily": "Fira Code"
 }

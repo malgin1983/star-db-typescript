@@ -1,10 +1,10 @@
 import { combineReducers, createStore, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
-import { PalanetReducer } from './reducers'
+import { PalanetReducer as planetState } from './reducers'
 
 const reducer = combineReducers({
-  PalanetReducer,
+  planetState,
 })
 
 const configureStore = () =>

@@ -4,15 +4,26 @@ import { connect } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { Action } from 'redux'
 import { InitialStateType } from '../../store/reducers'
+import { PlanetType } from '../../store/actions'
+import Spinner from '../../spiner/spiner'
 
-type MyExtraArg = undefined
-type MyThunkDispatch = ThunkDispatch<InitialStateType, MyExtraArg, Action>
+type MyThunkDispatch = ThunkDispatch<InitialStateType, undefined, Action>
+type returnedStateType = {
+  data: PlanetType
+  loading: boolean
+  error: any
+}
+type stateType = InitialStateType | returnedStateType
 
-interface IProps {
+type thunkType = {
   fetchPlanet(): Promise<void>
 }
+type planetStateType = {
+  planetState: returnedStateType
+}
 
-class Header extends Component<IProps> {
+type componentType = thunkType & planetStateType
+class Header extends Component<componentType> {
   updatePlanet = () => {
     this.props.fetchPlanet()
   }
@@ -22,9 +33,21 @@ class Header extends Component<IProps> {
   }
 
   render() {
+    const { data, loading } = this.props.planetState
+    if (loading) {
+      return <Spinner />
+    }
+    let id: number = Math.ceil(Math.random()*10)
     return (
       <div className="main">
-        <div>Random Planet</div>
+        <img className="planet-image"
+           src={`https://starwars-visualguide.com/assets/img/planets/${id}.jpg`}
+           alt="planet" />
+        <h3>Name - {data.name}</h3>
+        <div>Diameter - {data.diameter}</div>
+        <div>Population - {data.population}</div>
+        <div>Rotation_period - {data.rotation_period}</div>
+        <div>Orbital_period - {data.orbital_period}</div>
       </div>
     )
   }
@@ -34,4 +57,9 @@ const mapDispatchToProps = (dispatch: MyThunkDispatch) => {
     fetchPlanet: () => dispatch(fetchPlanet()),
   }
 }
-export default connect(null, mapDispatchToProps)(Header)
+const mapStateToProps = (state: planetStateType) => {
+  return {
+    planetState: state.planetState,
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Header)

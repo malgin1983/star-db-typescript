@@ -1,10 +1,10 @@
 import * as names from './names'
-import {ActionType} from './reducers'
 import { Dispatch } from 'redux';
 
 //********************TYPES ACTION*********************** */
 
-export interface PlanetType {
+export type PlanetType = {
+  name: string
   rotation_period: string
   orbital_period: string
   diameter: string
@@ -41,7 +41,7 @@ export type ErrorPlanetAction = {
   error: true
 }
 
-export type fetchPromiseType = RequestPlanetAction | SucccessPlanetAction | ErrorPlanetAction
+export type ActionType = RequestPlanetAction | SucccessPlanetAction | ErrorPlanetAction
 //*********************ACTION CREATORS***************** */
 
 export const requestPlanet = (): RequestPlanetAction => {
